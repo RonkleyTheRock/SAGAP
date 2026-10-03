@@ -1,4 +1,5 @@
-from ui import enable_ansi, header, line, colorize, GREEN
+from ui import enable_ansi, header
+from config import DIFFICULTIES
 
 
 def main():
@@ -6,11 +7,10 @@ def main():
 
     header("SAGAP")
 
-    print(colorize("The game has started.", GREEN))
-
-    line()
-
-    print("This is our new modular version.")
+    print("Difficulties:")
+    
+    for difficulty, multiplier in DIFFICULTIES.items():
+        print(f"{difficulty}: {multiplier}x")
 
 
 if __name__ == "__main__":
