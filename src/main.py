@@ -1,5 +1,6 @@
 from ui import enable_ansi, header
 from config import DIFFICULTIES
+from data.classes import CLASSES
 
 
 def main():
@@ -7,10 +8,10 @@ def main():
 
     header("SAGAP")
 
-    print("Difficulties:")
-    
-    for difficulty, multiplier in DIFFICULTIES.items():
-        print(f"{difficulty}: {multiplier}x")
+    print("Available Classes:")
+
+    for class_name in CLASSES:
+        print(class_name)
 
 
 if __name__ == "__main__":
