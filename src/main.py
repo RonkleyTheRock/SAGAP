@@ -1,6 +1,5 @@
 from ui import enable_ansi, header
-from data.classes import CLASSES
-from data.items import ITEMS
+from data.enemies import ENEMIES, FLOOR_ENEMY_POOL, MINIBOSSES, FINAL_BOSS
 
 
 def main():
@@ -8,14 +7,10 @@ def main():
 
     header("SAGAP")
 
-    print("Classes:")
-
-    for class_name in CLASSES:
-        print(f"{class_name}")
-
-    print("\nItems:")
-    for item_name in ITEMS:
-        print(f"{item_name}")
+    print(f"Regular enemies: {len(ENEMIES)}")
+    print(f"Floors with enemy pools: {len(FLOOR_ENEMY_POOL)}")
+    print(f"Mini-bosses: {len(MINIBOSSES)}")
+    print(f"Final boss: {FINAL_BOSS['name']}")
 
 
 if __name__ == "__main__":
