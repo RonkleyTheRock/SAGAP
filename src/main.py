@@ -1,16 +1,15 @@
 from ui import enable_ansi, header
-from data.enemies import ENEMIES, FLOOR_ENEMY_POOL, MINIBOSSES, FINAL_BOSS
+from data.floors import FLOORS
 
 
 def main():
     enable_ansi()
-
     header("SAGAP")
 
-    print(f"Regular enemies: {len(ENEMIES)}")
-    print(f"Floors with enemy pools: {len(FLOOR_ENEMY_POOL)}")
-    print(f"Mini-bosses: {len(MINIBOSSES)}")
-    print(f"Final boss: {FINAL_BOSS['name']}")
+    print(FLOORS[1]["name"])
+    print(FLOORS[1]["boss"])
+    print(FLOORS[10]["name"])
+    print(FLOORS[10]["boss"])
 
 
 if __name__ == "__main__":
