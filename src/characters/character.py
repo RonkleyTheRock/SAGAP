@@ -118,23 +118,102 @@ def sync_class_stats(character, old_class, new_class):
     )
 
     check_mastery(character)
+def change_classes(character):
+    old_class = character["class"]
 
+    print(f"\n{character['name']} is currently a {old_class}.")
+
+    new_class = choose_class()
+
+    if new_class == old_class:
+        print("The character is already this Class.")
+        return False
+
+    character["class"] = new_class
+
+    sync_class_stats(character, old_class, new_class)
+
+    print(f"{character['name']} changed Class from {old_class} to {new_class}.")
+
+    return True
+def choose_inherited_skill(character, old_class):
+    mastered = character.get("class_mastery", set())
+
+    if old_class not in mastered:
+        return
+
+    skills = CLASSES[old_class]["class_skills"]
+
+    if not skills:
+        return
+
+    print(f"\nChoose a skill to inherit from {old_class}:")
+
+    for i, skill in enumerate(skills, 1):
+        print(f"{i}. {skill['name']} - {skill['description']}")
+
+    while True:
+        choice = input("> ")
+
+        if choice.isdigit() and 1 <= int(choice) <= len(skills):
+            character["inherited_skill"] = skills[int(choice) - 1]
+            print(f"Inherited skill: {skills[int(choice) - 1]['name']}")
+            return
+
+        print("Invalid choice.")
+def unlocked_skills(character):
+    skills = CLASSES[character["class"]]["skills"]
+    return [
+        skill
+        for skill in skills
+        if character["level"] >= skill["level"]
+    ]
+def xp_needed(level):
+    return 10 + (3 * level)
 
 if __name__ == "__main__":
-    test_character = create_character(
-        "Irety",
-        "Strong and protective",
-        "Saber"
-    )
+    print("Level 1 XP:", xp_needed(1))
+    print("Level 5 XP:", xp_needed(5))
+    print("Level 10 XP:", xp_needed(10))
 
-    print("Before:", test_character["class"])
-    print("Stats:", test_character["stats"])
+def level_up(character):
+    while character["xp"] >= xp_needed(character["level"]):
+        required = xp_needed(character["level"])
+        character["xp"] -= required
+        character["level"] += 1
 
-    test_character["level"] = 5
+        character["max_hp"] += 10
+        character["hp"] = character["max_hp"]
 
-    sync_class_stats(test_character, "Saber", "Caster")
+        character["max_mp"] += 5
+        character["mp"] = character["max_mp"]
 
-    print("After:", test_character["class"])
-    print("Stats:", test_character["stats"])
-    print("HP:", test_character["hp"], "/", test_character["max_hp"])
-    print("MP:", test_character["mp"], "/", test_character["max_mp"])
+        print(
+            f"{character['name']} reached Level "
+            f"{character['level']}!"
+        )
+
+        check_mastery(character)
+
+        unlocked = [
+            skill
+            for skill in CLASSES[character["class"]]["skills"]
+            if skill["level"] == character["level"]
+        ]
+
+        if unlocked:
+            print("New skill unlocked:")
+            for skill in unlocked:
+                print(f"- {skill['name']}")
+
+def show_party(party):
+    header("PARTY", 64, "-")
+
+    for character in party:
+        print(
+            f"{character['name']} | "
+            f"{character['class']} | "
+            f"Level {character['level']} | "
+            f"HP {character['hp']}/{character['max_hp']} | "
+            f"MP {character['mp']}/{character['max_mp']}"
+        )
