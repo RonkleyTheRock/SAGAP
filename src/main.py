@@ -1,15 +1,22 @@
 from ui import enable_ansi, header
-from data.floors import FLOORS
+from data.narrative import (
+    GUIDE_NAME,
+    GUIDE_MOTHER_LINES,
+    GUIDE_SELF_LINES,
+    RIDDLES,
+    LORE_FRAGMENTS,
+)
 
 
 def main():
     enable_ansi()
     header("SAGAP")
 
-    print(FLOORS[1]["name"])
-    print(FLOORS[1]["boss"])
-    print(FLOORS[10]["name"])
-    print(FLOORS[10]["boss"])
+    print("Guide:", GUIDE_NAME)
+    print("Floor 1:", GUIDE_MOTHER_LINES[1])
+    print("Self lines:", len(GUIDE_SELF_LINES))
+    print("Riddles:", len(RIDDLES))
+    print("Lore floors:", len(LORE_FRAGMENTS))
 
 
 if __name__ == "__main__":
