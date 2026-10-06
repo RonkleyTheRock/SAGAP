@@ -47,3 +47,18 @@ def use_item(item_name, target):
 
     return True
 
+if __name__ == "__main__":
+    character = {
+        "hp": 10,
+        "max_hp": 100,
+        "mp": 20,
+        "max_mp": 50,
+        "status": "Poison",
+        "statuses": {"Poison": 2}
+    }
+
+    print("Before:", character)
+
+    use_item("Panacea", character)
+
+    print("After:", character)
