@@ -116,3 +116,11 @@ def add_item(inventory, item_name, amount=1):
 
     inventory[item_name] += amount
     return True
+if __name__ == "__main__":
+    inventory = create_inventory()
+
+    print("Before:", inventory["Medicine"])
+
+    add_item(inventory, "Medicine", 2)
+
+    print("After:", inventory["Medicine"])
