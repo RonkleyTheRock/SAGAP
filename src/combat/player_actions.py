@@ -15,29 +15,16 @@ def player_action(character, enemies, party, items, knowledge):
         )
 
     while True:
-        line()
+    line()
 
-        print(
-            f"{colorize(character['name'], CYAN + BOLD)}'s turn | "
-            f"{character['class']} | "
-            f"HP {hp_bar(character['hp'], character['max_hp'], 12)} "
-            f"{character['hp']}/{character['max_hp']}  "
-            f"MP {mp_bar(character['mp'], character['max_mp'], 12)} "
-            f"{character['mp']}/{character['max_mp']}  "
-            f"NP {character.get('np_gauge', 0)}/100"
-        )
+    print(
+        f"{colorize(character['name'], CYAN + BOLD)}'s turn | "
+        f"{character['class']} | "
+        f"HP {hp_bar(character['hp'], character['max_hp'], 12)} "
+        f"{character['hp']}/{character['max_hp']}  "
+        f"MP {mp_bar(character['mp'], character['max_mp'], 12)} "
+        f"{character['mp']}/{character['max_mp']}  "
+        f"NP {character.get('np_gauge', 0)}/100"
+    )
 
-
-
-if __name__ == "__main__":
-    character = {
-        "name": "Irety",
-        "class": "Saber",
-        "hp": 100,
-        "max_hp": 135,
-        "mp": 20,
-        "max_mp": 25,
-        "np_gauge": 0
-    }
-
-    player_action(character, [], [], {}, {})
+    print("1. Attack  2. Skill  3. Item  4. Guard  5. Analyse  6. Escape")
