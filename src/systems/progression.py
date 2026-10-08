@@ -61,3 +61,10 @@ def unlocked_skills(character):
             skills.append(mastered)
 
     return skills
+
+
+def check_mastery(character):
+    if character["level"] >= 7:
+        character.setdefault("class_mastery", set()).add(
+            character["class"]
+        )
