@@ -122,16 +122,12 @@ if __name__ == "__main__":
 
     show_battle_status(enemies, party)
 
-    order = sorted(
+   order = sorted(
             alive_party(party),
             key=lambda c: c["stats"]["AG"] + random.randint(0, 8),
             reverse=True
         )
 
-
-if __name__ == "__main__":
-    party = [
-        {"name": "Irety", "hp": 100, "stats": {"AG": 6}},
-        {"name": "Iyanu", "hp": 100, "stats": {"AG": 10}},
-        {"name": "Ayonikun", "hp": 100, "stats": {"AG": 15}}
-    ]
+        for character in order:
+            if not alive_enemies(enemies) or not alive_party(party):
+                break
