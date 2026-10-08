@@ -91,6 +91,8 @@ def use_item(item_name, target):
 
     else:
         return False
+
+
 if __name__ == "__main__":
     character = {
         "hp": 50,
@@ -106,3 +108,11 @@ if __name__ == "__main__":
     use_item("Medicine", character)
 
     print("After:", character)
+
+
+def add_item(inventory, item_name, amount=1):
+    if item_name not in inventory:
+        return False
+
+    inventory[item_name] += amount
+    return True
