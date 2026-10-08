@@ -67,3 +67,10 @@ def classify(result):
         return "Resist"
 
     return "Neutral"
+
+def combat(party, enemies, items, knowledge, difficulty, boss=False):
+    max_tokens = len(alive_party(party))
+    header("COMBAT START", 64, "=")
+
+if __name__ == "__main__":
+    combat([], [], {}, {}, 1.15)
