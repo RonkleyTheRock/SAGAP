@@ -121,3 +121,9 @@ if __name__ == "__main__":
     ]
 
     show_battle_status(enemies, party)
+
+    order = sorted(
+            alive_party(party),
+            key=lambda c: c["stats"]["AG"] + random.randint(0, 8),
+            reverse=True
+        )
