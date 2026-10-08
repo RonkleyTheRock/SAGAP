@@ -82,11 +82,14 @@ def combat(party, enemies, items, knowledge, difficulty, boss=False):
   while alive_party(party) and alive_enemies(enemies):
         tokens = max_tokens
 
+       for c in party:
+            c["guarding"] = False
 if __name__ == "__main__":
     party = [
         {
             "name": "Irety",
             "hp": 100,
+            "guarding": True,
             "_free_cast_used": True
         }
     ]
