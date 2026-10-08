@@ -30,6 +30,8 @@ def scaled_stat(value, floor, difficulty):
         int(value * difficulty * (1 + 0.10 * (floor - 1)))if __name__ == "__main__":
 
 
-if __name__ == "__main__":
-    print(scaled_stat(100, 3, 1.15))
-   
+def apply_buff(target, name, value, turns):
+    target.setdefault("buffs", {})[name] = {
+        "value": value,
+        "turns": turns
+    }
