@@ -32,3 +32,10 @@ def affinity_multiplier(result):
         "Resist": 0.5,
         "Strong": 0.25
     }.get(result, 1.0)
+
+
+if __name__ == "__main__":
+    print(affinity_multiplier("Weak"))
+    print(affinity_multiplier("Neutral"))
+    print(affinity_multiplier("Resist"))
+    print(affinity_multiplier("Strong"))
