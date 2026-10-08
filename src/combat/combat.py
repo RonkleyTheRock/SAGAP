@@ -9,3 +9,7 @@ if __name__ == "__main__":
     ]
 
     print(alive_party(party))
+
+
+def alive_enemies(enemies):
+    return [e for e in enemies if e["hp"] > 0]
