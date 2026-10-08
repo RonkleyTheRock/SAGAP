@@ -7,19 +7,22 @@ def player_action(character, enemies, party, items, knowledge):
             character["max_mp"],
             character["mp"] + 3
         )
-if __name__ == "__main__":
-    character = {
-        "class": "Lancer",
-        "mp": 10,
-        "max_mp": 30
-    }
+def player_action(character, enemies, party, items, knowledge):
+    if character.get("class") == "Lancer":
+        character["mp"] = min(
+            character["max_mp"],
+            character["mp"] + 3
+        )
 
-    player_action(
-        character,
-        [],
-        [],
-        {},
-        {}
-    )
+    while True:
+        line()
 
-    print("MP:", character["mp"])
+        print(
+            f"{colorize(character['name'], CYAN + BOLD)}'s turn | "
+            f"{character['class']} | "
+            f"HP {hp_bar(character['hp'], character['max_hp'], 12)} "
+            f"{character['hp']}/{character['max_hp']}  "
+            f"MP {mp_bar(character['mp'], character['max_mp'], 12)} "
+            f"{character['mp']}/{character['max_mp']}  "
+            f"NP {character.get('np_gauge', 0)}/100"
+        )
