@@ -15,16 +15,6 @@ def alive_enemies(enemies):
     return [e for e in enemies if e["hp"] > 0]
 
 
-if __name__ == "__main__":
-    enemies = [
-        {"name": "Oni", "hp": 100},
-        {"name": "Kappa", "hp": 0},
-        {"name": "Yurei", "hp": 50},
-    ]
-
-    print(alive_enemies(enemies))
-
-
 def affinity_multiplier(result):
     return {
         "Weak": 1.5,
@@ -34,8 +24,12 @@ def affinity_multiplier(result):
     }.get(result, 1.0)
 
 
+def scaled_stat(value, floor, difficulty):
+    return max(
+        1,
+        int(value * difficulty * (1 + 0.10 * (floor - 1)))if __name__ == "__main__":
+
+
 if __name__ == "__main__":
-    print(affinity_multiplier("Weak"))
-    print(affinity_multiplier("Neutral"))
-    print(affinity_multiplier("Resist"))
-    print(affinity_multiplier("Strong"))
+    print(scaled_stat(100, 3, 1.15))
+   
