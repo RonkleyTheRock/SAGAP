@@ -134,3 +134,30 @@ if __name__ == "__main__":
 
             if character["hp"] <= 0:
                 continue
+
+
+if __name__ == "__main__":
+    party = [
+        {"name": "Irety", "hp": 0, "stats": {"AG": 15}},
+        {"name": "Iyanu", "hp": 100, "stats": {"AG": 10}},
+        {"name": "Ayonikun", "hp": 100, "stats": {"AG": 5}}
+    ]
+
+    enemies = [
+        {"name": "Test Enemy", "hp": 100}
+    ]
+
+    order = sorted(
+        alive_party(party),
+        key=lambda c: c["stats"]["AG"] + random.randint(0, 8),
+        reverse=True
+    )
+
+    for character in order:
+        if not alive_enemies(enemies) or not alive_party(party):
+            break
+
+        if character["hp"] <= 0:
+            continue
+
+        print(character["name"], "gets a turn.")
