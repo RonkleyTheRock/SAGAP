@@ -35,3 +35,11 @@ def apply_buff(target, name, value, turns):
         "value": value,
         "turns": turns
     }
+
+
+def apply_status(target, status, chance, duration=2):
+    if random.random() < chance:
+        target["statuses"][status] = duration
+        target["status"] = status
+        return True
+    return False
