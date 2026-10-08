@@ -128,6 +128,9 @@ if __name__ == "__main__":
             reverse=True
         )
 
-        for character in order:
+          for character in order:
             if not alive_enemies(enemies) or not alive_party(party):
                 break
+
+            if character["hp"] <= 0:
+                continue
