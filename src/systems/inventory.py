@@ -116,11 +116,13 @@ def add_item(inventory, item_name, amount=1):
 
     inventory[item_name] += amount
     return True
-if __name__ == "__main__":
-    inventory = create_inventory()
 
-    print("Before:", inventory["Medicine"])
+def remove_item(inventory, item_name, amount=1):
+    if item_name not in inventory:
+        return False
 
-    add_item(inventory, "Medicine", 2)
+    if inventory[item_name] < amount:
+        return False
 
-    print("After:", inventory["Medicine"])
+    inventory[item_name] -= amount
+    return True
