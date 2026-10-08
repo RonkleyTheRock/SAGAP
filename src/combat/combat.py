@@ -2,7 +2,7 @@ import random
 
 from config import INCAPACITATING_STATUSES
 from ui import header, colorize, hp_bar, mp_bar, line
-from ui import RED, BOLD, DIM, CYAN
+from ui import RED, GREEN, BOLD, DIM, CYAN
 
 
 def alive_party(party):
@@ -41,6 +41,7 @@ def apply_status(target, status, chance, duration=2):
         target["statuses"][status] = duration
         target["status"] = status
         return True
+
     return False
 
 
@@ -68,6 +69,7 @@ def show_battle_status(enemies, party):
 
     for c in party:
         alive = c["hp"] > 0
+
         tag = colorize(
             c["name"],
             DIM if not alive else CYAN + BOLD
@@ -97,6 +99,7 @@ def combat(party, enemies, items, knowledge, difficulty, boss=False):
     max_tokens = len(alive_party(party))
 
     header("COMBAT START", 64, "=")
+
     print(
         "Press-turn combat: weaknesses grant a bonus action, "
         "resisted hits cost two."
@@ -106,10 +109,11 @@ def combat(party, enemies, items, knowledge, difficulty, boss=False):
         c["_free_cast_used"] = False
 
     while alive_party(party) and alive_enemies(enemies):
-        tokens = max_tokens
 
         for c in party:
             c["guarding"] = False
+
+        tokens = max_tokens
 
         show_battle_status(enemies, party)
 
@@ -120,6 +124,7 @@ def combat(party, enemies, items, knowledge, difficulty, boss=False):
         )
 
         for character in order:
+
             if not alive_enemies(enemies) or not alive_party(party):
                 break
 
@@ -136,7 +141,92 @@ def combat(party, enemies, items, knowledge, difficulty, boss=False):
                         DIM
                     )
                 )
+
                 tokens = max(0, tokens - 1)
                 continue
 
+            result_tuple = player_action(
+                character,
+                enemies,
+                party,
+                items,
+                knowledge
+            )
 
+            if result_tuple is None:
+                continue
+
+            result, cost = result_tuple
+
+            if result == "Escape":
+                chance = (
+                    0.30
+                    + sum(
+                        c["stats"]["AG"]
+                        for c in alive_party(party)
+                    ) / 450
+                )
+
+                if random.random() < chance and not boss:
+                    print("Escaped successfully!")
+                    return True, "escaped"
+
+                print("The escape attempt failed!")
+                cost = 1
+
+            if result == "Weak":
+                tokens = min(
+                    max_tokens + 1,
+                    tokens + 1
+                )
+
+                print(
+                    colorize(
+                        "WEAKNESS! An extra action has been gained.",
+                        GREEN + BOLD
+                    )
+                )
+
+            elif result == "Resist":
+                tokens = max(0, tokens - 2)
+
+                print(
+                    colorize(
+                        "The attack was resisted. "
+                        "Two actions were consumed.",
+                        RED
+                    )
+                )
+
+            else:
+                tokens = max(0, tokens - cost)
+
+            if tokens <= 0:
+                break
+
+        if not alive_enemies(enemies):
+            break
+
+        print(
+            "\n" + colorize(
+                "Enemy phase.",
+                RED + BOLD
+            )
+        )
+
+        for enemy in list(alive_enemies(enemies)):
+
+            if enemy["hp"] <= 0:
+                continue
+
+            enemy_turn(enemy, party)
+
+            if not alive_party(party):
+                return False, "dead"
+
+        tick_effects(party, enemies)
+
+    if not alive_party(party):
+        return False, "dead"
+
+    return True, "win"
