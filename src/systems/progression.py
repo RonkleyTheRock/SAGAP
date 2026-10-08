@@ -68,3 +68,16 @@ def check_mastery(character):
         character.setdefault("class_mastery", set()).add(
             character["class"]
         )
+
+if __name__ == "__main__":
+    character = create_character(
+        "Irety",
+        "Strong and protective",
+        "Saber"
+    )
+
+    character["level"] = 7
+
+    check_mastery(character)
+
+    print(character["class_mastery"])
