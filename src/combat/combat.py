@@ -13,3 +13,13 @@ if __name__ == "__main__":
 
 def alive_enemies(enemies):
     return [e for e in enemies if e["hp"] > 0]
+
+
+if __name__ == "__main__":
+    enemies = [
+        {"name": "Oni", "hp": 100},
+        {"name": "Kappa", "hp": 0},
+        {"name": "Yurei", "hp": 50},
+    ]
+
+    print(alive_enemies(enemies))
