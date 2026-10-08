@@ -127,3 +127,11 @@ if __name__ == "__main__":
             key=lambda c: c["stats"]["AG"] + random.randint(0, 8),
             reverse=True
         )
+
+
+if __name__ == "__main__":
+    party = [
+        {"name": "Irety", "hp": 100, "stats": {"AG": 6}},
+        {"name": "Iyanu", "hp": 100, "stats": {"AG": 10}},
+        {"name": "Ayonikun", "hp": 100, "stats": {"AG": 15}}
+    ]
