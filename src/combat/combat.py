@@ -56,3 +56,14 @@ if __name__ == "__main__":
 
     print("Success:", result)
     print("Target:", target)
+
+
+
+def classify(result):
+    if result == "Weak":
+        return "Weak"
+
+    if result in ("Resist", "Strong"):
+        return "Resist"
+
+    return "Neutral"
