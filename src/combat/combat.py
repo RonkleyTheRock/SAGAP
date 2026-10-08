@@ -84,18 +84,3 @@ def combat(party, enemies, items, knowledge, difficulty, boss=False):
 
        for c in party:
             c["guarding"] = False
-if __name__ == "__main__":
-    party = [
-        {
-            "name": "Irety",
-            "hp": 100,
-            "guarding": True,
-            "_free_cast_used": True
-        }
-    ]
-
-    enemies = []
-
-    combat(party, enemies, {}, {}, 1.15)
-
-    print(party)
