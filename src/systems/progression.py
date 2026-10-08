@@ -43,21 +43,21 @@ def level_up(character, amount):
                 stat = STAT_NAMES[int(c) - 1]
                 character["stats"][stat] += 1
                 break
-from characters.character import create_character
+def unlocked_skills(character):
+    skills = [
+        skill
+        for skill in CLASSES[character["class"]]["skills"]
+        if character["level"] >= skill["level"]
+    ]
 
+    if character["inherited_skill"]:
+        skills.append(character["inherited_skill"])
 
-if __name__ == "__main__":
-    character = create_character(
-        "Irety",
-        "Strong and protective",
-        "Saber"
-    )
+    for class_name in sorted(character.get("class_mastery", set())):
+        if class_name != character["class"]:
+            mastered = CLASSES[class_name]["skills"][0].copy()
+            mastered["source"] = class_name
+            mastered["mastered"] = True
+            skills.append(mastered)
 
-    print("Level:", character["level"])
-    print("XP:", character["xp"])
-
-    level_up(character, 13)
-
-    print("Level:", character["level"])
-    print("XP:", character["xp"])
-    print("Stats:", character["stats"])
+    return skills
