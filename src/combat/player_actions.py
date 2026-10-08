@@ -26,3 +26,18 @@ def player_action(character, enemies, party, items, knowledge):
             f"{character['mp']}/{character['max_mp']}  "
             f"NP {character.get('np_gauge', 0)}/100"
         )
+
+
+
+if __name__ == "__main__":
+    character = {
+        "name": "Irety",
+        "class": "Saber",
+        "hp": 100,
+        "max_hp": 135,
+        "mp": 20,
+        "max_mp": 25,
+        "np_gauge": 0
+    }
+
+    player_action(character, [], [], {}, {})
