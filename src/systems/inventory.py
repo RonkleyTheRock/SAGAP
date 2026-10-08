@@ -62,3 +62,32 @@ if __name__ == "__main__":
     use_item("Panacea", character)
 
     print("After:", character)
+def use_item(item_name, target):
+    if item_name == "Medicine":
+        target["hp"] = min(target["max_hp"], target["hp"] + 60)
+
+    elif item_name == "Greater Medicine":
+        target["hp"] = min(target["max_hp"], target["hp"] + 140)
+
+    elif item_name == "Ether":
+        target["mp"] = min(target["max_mp"], target["mp"] + 35)
+
+    elif item_name == "Greater Ether":
+        target["mp"] = min(target["max_mp"], target["mp"] + 80)
+
+    elif item_name == "Panacea":
+        target["status"] = None
+        target["statuses"] = {}
+
+    elif item_name == "Revival Bead":
+        if target["hp"] > 0:
+            return False
+
+        target["hp"] = max(1, int(target["max_hp"] * 0.35))
+
+    elif item_name == "Amrita":
+        target["hp"] = min(target["max_hp"], target["hp"] + 100)
+        target["mp"] = min(target["max_mp"], target["mp"] + 40)
+
+    else:
+        return False
