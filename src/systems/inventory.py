@@ -132,3 +132,10 @@ def show_inventory(inventory):
 
     for item_name, amount in inventory.items():
         print(f"{item_name}: x{amount}")
+if __name__ == "__main__":
+            inventory = create_inventory()
+
+            add_item(inventory, "Medicine", 2)
+            remove_item(inventory, "Ether")
+
+            show_inventory(inventory)
