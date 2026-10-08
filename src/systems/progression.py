@@ -1,6 +1,45 @@
 def xp_needed(level):
     return 10 + (3 * level)
 
-if __name__ == "__main__":
-    print(xp_needed(1))
-    print(xp_needed(5))
+from config import STAT_NAMES
+from ui import colorize, GREEN, BOLD
+
+
+def level_up(character, amount):
+    character["xp"] += amount
+
+    while character["xp"] >= xp_needed(character["level"]):
+        character["xp"] -= xp_needed(character["level"])
+        character["level"] += 1
+
+        automatic = STAT_NAMES[
+            (character["level"] - 2) % len(STAT_NAMES)
+        ]
+
+        character["stats"][automatic] += 1
+        character["max_hp"] += 10
+        character["max_mp"] += 5
+        character["hp"] = character["max_hp"]
+        character["mp"] = character["max_mp"]
+
+        print(
+            colorize(
+                f"\n*** {character['name']} reached LEVEL "
+                f"{character['level']}! ***",
+                GREEN + BOLD
+            )
+        )
+
+        print(f"Automatic stat increase: {automatic} +1")
+        print("Choose one additional stat:")
+
+        for i, stat in enumerate(STAT_NAMES, 1):
+            print(f"{i}. {stat}")
+
+        while True:
+            c = input("> ")
+
+            if c.isdigit() and 1 <= int(c) <= 5:
+                stat = STAT_NAMES[int(c) - 1]
+                character["stats"][stat] += 1
+                break
