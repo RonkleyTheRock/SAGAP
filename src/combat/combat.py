@@ -23,3 +23,12 @@ if __name__ == "__main__":
     ]
 
     print(alive_enemies(enemies))
+
+
+def affinity_multiplier(result):
+    return {
+        "Weak": 1.5,
+        "Neutral": 1.0,
+        "Resist": 0.5,
+        "Strong": 0.25
+    }.get(result, 1.0)
