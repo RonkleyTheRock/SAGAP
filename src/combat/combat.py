@@ -1,6 +1,7 @@
 import random
 
-from ui import header
+from ui import header, colorize, hp_bar, mp_bar, line
+from ui import RED, BOLD, DIM, CYAN
 
 
 def alive_party(party):
@@ -50,7 +51,33 @@ def classify(result):
         return "Resist"
 
     return "Neutral"
+def show_battle_status(enemies, party):
+    header("BATTLE", 64, "=")
 
+    for e in alive_enemies(enemies):
+        print(colorize(e["name"], RED + BOLD))
+        print(f"  HP {hp_bar(e['hp'], e['max_hp'])} {e['hp']}/{e['max_hp']}")
+
+    line()
+
+    for c in party:
+        alive = c["hp"] > 0
+        tag = colorize(c["name"], DIM if not alive else CYAN + BOLD)
+        status = f" [{c['status']}]" if c.get("status") else ""
+
+        print(f"{tag} Lv.{c['level']} {c['class']}{status}")
+
+        if alive:
+            print(
+                f"  HP {hp_bar(c['hp'], c['max_hp'])} "
+                f"{c['hp']}/{c['max_hp']}   "
+                f"MP {mp_bar(c['mp'], c['max_mp'])} "
+                f"{c['mp']}/{c['max_mp']}"
+            )
+        else:
+            print("  DEFEATED")
+
+    print("=" * 64)
 
 def combat(party, enemies, items, knowledge, difficulty, boss=False):
     max_tokens = len(alive_party(party))
@@ -74,13 +101,23 @@ if __name__ == "__main__":
         {
             "name": "Irety",
             "hp": 100,
-            "guarding": True,
-            "_free_cast_used": True
+            "max_hp": 100,
+            "mp": 25,
+            "max_mp": 25,
+            "level": 1,
+            "class": "Saber",
+            "status": None,
+            "guarding": False,
+            "_free_cast_used": False
         }
     ]
 
-    enemies = []
+    enemies = [
+        {
+            "name": "Test Enemy",
+            "hp": 80,
+            "max_hp": 80
+        }
+    ]
 
-    combat(party, enemies, {}, {}, 1.15)
-
-    print(party)
+    show_battle_status(enemies, party)
