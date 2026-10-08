@@ -1,3 +1,4 @@
+import random
 def alive_party(party):
     return [c for c in party if c["hp"] > 0]
 
@@ -43,3 +44,15 @@ def apply_status(target, status, chance, duration=2):
         target["status"] = status
         return True
     return False
+
+
+if __name__ == "__main__":
+    target = {
+        "status": None,
+        "statuses": {}
+    }
+
+    result = apply_status(target, "Poison", 1.0)
+
+    print("Success:", result)
+    print("Target:", target)
