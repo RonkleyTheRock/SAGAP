@@ -1,8 +1,8 @@
 import random
 
+from config import INCAPACITATING_STATUSES
 from ui import header, colorize, hp_bar, mp_bar, line
 from ui import RED, BOLD, DIM, CYAN
-
 
 def alive_party(party):
     return [c for c in party if c["hp"] > 0]
