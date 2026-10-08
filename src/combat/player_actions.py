@@ -7,3 +7,19 @@ def player_action(character, enemies, party, items, knowledge):
             character["max_mp"],
             character["mp"] + 3
         )
+if __name__ == "__main__":
+    character = {
+        "class": "Lancer",
+        "mp": 10,
+        "max_mp": 30
+    }
+
+    player_action(
+        character,
+        [],
+        [],
+        {},
+        {}
+    )
+
+    print("MP:", character["mp"])
