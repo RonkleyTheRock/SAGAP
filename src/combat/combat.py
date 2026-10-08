@@ -74,6 +74,8 @@ def classify(result):
 def combat(party, enemies, items, knowledge, difficulty, boss=False):
     max_tokens = len(alive_party(party))
     header("COMBAT START", 64, "=")
+    print("Press-turn combat: weaknesses grant a bonus action, resisted hits cost two.")
 
-if __name__ == "__main__":
-    combat([], [], {}, {}, 1.15)
+    for c in party:
+        c["_free_cast_used"] = False
+
