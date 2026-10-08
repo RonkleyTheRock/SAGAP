@@ -28,3 +28,4 @@ def player_action(character, enemies, party, items, knowledge):
     )
 
     print("1. Attack  2. Skill  3. Item  4. Guard  5. Analyse  6. Escape")
+    c = input("> ")
