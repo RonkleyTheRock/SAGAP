@@ -126,3 +126,12 @@ def remove_item(inventory, item_name, amount=1):
 
     inventory[item_name] -= amount
     return True
+
+if __name__ == "__main__":
+    inventory = create_inventory()
+
+    print("Before:", inventory["Medicine"])
+
+    remove_item(inventory, "Medicine")
+
+    print("After:", inventory["Medicine"])
