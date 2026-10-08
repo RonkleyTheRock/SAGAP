@@ -43,3 +43,21 @@ def level_up(character, amount):
                 stat = STAT_NAMES[int(c) - 1]
                 character["stats"][stat] += 1
                 break
+from characters.character import create_character
+
+
+if __name__ == "__main__":
+    character = create_character(
+        "Irety",
+        "Strong and protective",
+        "Saber"
+    )
+
+    print("Level:", character["level"])
+    print("XP:", character["xp"])
+
+    level_up(character, 13)
+
+    print("Level:", character["level"])
+    print("XP:", character["xp"])
+    print("Stats:", character["stats"])
