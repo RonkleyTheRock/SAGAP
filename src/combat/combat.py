@@ -1,18 +1,10 @@
 import random
+
 from ui import header
 
 
 def alive_party(party):
     return [c for c in party if c["hp"] > 0]
-
-if __name__ == "__main__":
-    party = [
-        {"name": "Irety", "hp": 100},
-        {"name": "Iyanu", "hp": 0},
-        {"name": "Ayonikun", "hp": 50},
-    ]
-
-    print(alive_party(party))
 
 
 def alive_enemies(enemies):
@@ -31,7 +23,8 @@ def affinity_multiplier(result):
 def scaled_stat(value, floor, difficulty):
     return max(
         1,
-        int(value * difficulty * (1 + 0.10 * (floor - 1)))if __name__ == "__main__":
+        int(value * difficulty * (1 + 0.10 * (floor - 1)))
+    )
 
 
 def apply_buff(target, name, value, turns):
@@ -49,19 +42,6 @@ def apply_status(target, status, chance, duration=2):
     return False
 
 
-if __name__ == "__main__":
-    target = {
-        "status": None,
-        "statuses": {}
-    }
-
-    result = apply_status(target, "Poison", 1.0)
-
-    print("Success:", result)
-    print("Target:", target)
-
-
-
 def classify(result):
     if result == "Weak":
         return "Weak"
@@ -71,6 +51,7 @@ def classify(result):
 
     return "Neutral"
 
+
 def combat(party, enemies, items, knowledge, difficulty, boss=False):
     max_tokens = len(alive_party(party))
     header("COMBAT START", 64, "=")
@@ -79,8 +60,27 @@ def combat(party, enemies, items, knowledge, difficulty, boss=False):
     for c in party:
         c["_free_cast_used"] = False
 
-  while alive_party(party) and alive_enemies(enemies):
+    while alive_party(party) and alive_enemies(enemies):
         tokens = max_tokens
 
-       for c in party:
+        for c in party:
             c["guarding"] = False
+
+        show_battle_status(enemies, party)
+
+
+if __name__ == "__main__":
+    party = [
+        {
+            "name": "Irety",
+            "hp": 100,
+            "guarding": True,
+            "_free_cast_used": True
+        }
+    ]
+
+    enemies = []
+
+    combat(party, enemies, {}, {}, 1.15)
+
+    print(party)
