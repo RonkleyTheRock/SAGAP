@@ -3,7 +3,9 @@ import random
 from config import INCAPACITATING_STATUSES
 from ui import header, colorize, hp_bar, mp_bar, line
 from ui import RED, GREEN, BOLD, DIM, CYAN
-
+from combat.player_actions import player_action
+from combat.enemy_actions import enemy_turn
+from combat.effects import tick_effects
 
 def alive_party(party):
     return [c for c in party if c["hp"] > 0]
