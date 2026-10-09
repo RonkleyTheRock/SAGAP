@@ -1,13 +1,11 @@
-def skill_menu(character):
-    #Display available skills and return the selected skill
-    pass
+import random
 
-
-def process_skill(character, skill, party, enemies, knowledge):
-#Process a selected skill during combat.
-    pass
-
-
-def execute_noble_phantasm(character, party, enemies, knowledge):
-#Execute the character's Noble Phantasm.
-    pass
+from data.classes import CLASSES
+from config import MAGIC_AFFINITIES
+from ui import (
+    header, colorize, CYAN, BOLD, YELLOW, GREEN,
+    MAGENTA, RED, WHITE, ITALIC
+)
+from combat.targeting import (
+    choose_enemy, choose_character, alive_party, alive_enemies
+)
