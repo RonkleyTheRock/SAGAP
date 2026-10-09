@@ -3,7 +3,7 @@ def xp_needed(level):
 
 from config import STAT_NAMES
 from ui import colorize, GREEN, BOLD
-
+from data.classes import CLASSES
 
 def level_up(character, amount):
     character["xp"] += amount
