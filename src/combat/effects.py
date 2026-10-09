@@ -1,21 +1,45 @@
+from ui import colorize, RED, BOLD
+
+
 def tick_effects(party, enemies):
-    """Update active status effects and buffs after a combat round."""
+    for group in (party, enemies):
+        for c in group:
+            if c.get("hp", 0) <= 0:
+                continue
 
-    for target in party + enemies:
-        statuses = target.setdefault("statuses", {})
-        buffs = target.setdefault("buffs", {})
+            for status in list(c.get("statuses", {})):
+                if status == "Poison":
+                    dmg = max(1, int(c["max_hp"] * 0.06))
+                    c["hp"] -= dmg
+                    print(f"{c['name']} suffers {dmg} poison damage.")
 
-        for status in list(statuses):
-            statuses[status] -= 1
+                elif status == "Burn":
+                    dmg = max(1, int(c["max_hp"] * 0.09))
+                    c["hp"] -= dmg
+                    print(f"{c['name']} is scorched for {dmg} damage.")
 
-            if statuses[status] <= 0:
-                del statuses[status]
+                c["statuses"][status] -= 1
 
-        for buff in list(buffs):
-            buffs[buff]["turns"] -= 1
+                if c["statuses"][status] <= 0:
+                    del c["statuses"][status]
 
-            if buffs[buff]["turns"] <= 0:
-                del buffs[buff]
+                    if c.get("status") == status:
+                        c["status"] = None
 
-        if target.get("status") not in statuses:
-            target["status"] = next(iter(statuses), None)
+            for buff in list(c.get("buffs", {})):
+                c["buffs"][buff]["turns"] -= 1
+
+                if c["buffs"][buff]["turns"] <= 0:
+                    del c["buffs"][buff]
+
+            if c.get("taunt", 0) > 0:
+                c["taunt"] -= 1
+
+            if c["hp"] <= 0:
+                c["hp"] = 0
+                print(
+                    colorize(
+                        f"{c['name']} succumbs to their wounds!",
+                        RED + BOLD
+                    )
+                )
