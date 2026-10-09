@@ -1,37 +1,36 @@
+
 import random
 
-from ui import colorize, RED, GREEN, BOLD
+from ui import colorize, CYAN, MAGENTA, BOLD, RED, YELLOW
+from combat.targeting import alive_party
+from combat.helpers import apply_status
 
 
 def enemy_turn(enemy, party):
-    living = [c for c in party if c["hp"] > 0]
+    living = alive_party(party)
 
     if not living:
         return
 
     taunting = [c for c in living if c.get("taunt", 0) > 0]
 
-    if taunting:
-        target = random.choice(taunting)
-    elif random.random() < 0.65:
-        target = min(
-            living,
-            key=lambda c: c["hp"] / c["max_hp"]
-        )
-    else:
-        target = random.choice(living)
+    target = random.choice(taunting) if taunting else (
+        min(living, key=lambda c: c["hp"] / c["max_hp"])
+        if random.random() < 0.65
+        else random.choice(living)
+    )
 
     actions = enemy.get("actions", 1)
-    enemy_buffs = enemy.get("buffs", {})
+    ebuffs = enemy.get("buffs", {})
 
-    attack_modifier = (
+    atk_mod = (
         1.0
-        + enemy_buffs.get("ATK_UP", {}).get("value", 0)
-        - enemy_buffs.get("ATK_DOWN", {}).get("value", 0)
+        + ebuffs.get("ATK_UP", {}).get("value", 0)
+        - ebuffs.get("ATK_DOWN", {}).get("value", 0)
     )
 
     for _ in range(actions):
-        living = [c for c in party if c["hp"] > 0]
+        living = alive_party(party)
 
         if not living:
             return
@@ -39,24 +38,87 @@ def enemy_turn(enemy, party):
         if target["hp"] <= 0:
             target = random.choice(living)
 
+        special = random.random() < 0.25
+
+        base_damage = (
+            enemy["damage"]
+            * (1.4 if special else 1.0)
+            * atk_mod
+        )
+
         damage = max(
             1,
-            int(
-                enemy["attack"]
-                * attack_modifier
-                - target["stats"]["EN"]
-            )
+            int(base_damage)
+            + random.randint(-5, 6)
+            - target["stats"]["EN"] * 2 // 3
         )
+
+        tbuffs = target.get("buffs", {})
+
+        def_mod = (
+            tbuffs.get("DEF_DOWN", {}).get("value", 0)
+            - tbuffs.get("DEF_UP", {}).get("value", 0)
+        )
+
+        damage = max(1, int(damage * (1 + def_mod)))
 
         if target.get("guarding", False):
-            damage = max(1, damage // 2)
+            damage = max(1, int(damage * 0.45))
 
-        target["hp"] = max(0, target["hp"] - damage)
+        if special and target.get("class") == "Saber":
+            damage = max(1, int(damage * 0.80))
 
-        print(
-            f"{enemy['name']} attacks {target['name']} "
-            f"for {damage} damage!"
+        if target.get("class") == "Berserker":
+            damage = max(1, int(damage * 1.15))
+
+        evade_chance = (
+            target["stats"]["AG"] / 300
+            + tbuffs.get("EVADE_UP", {}).get("value", 0)
         )
 
+        if target.get("class") == "Assassin":
+            evade_chance += 0.10
+
+        if random.random() < evade_chance:
+            print(colorize(f"{target['name']} evaded the attack!", CYAN))
+            continue
+
+        target["hp"] -= damage
+
+        target["np_gauge"] = min(
+            100, target.get("np_gauge", 0) + 12
+        )
+
+        tag = (
+            colorize(" [SPECIAL]", MAGENTA + BOLD)
+            if special else ""
+        )
+
+        print(
+            f"{colorize(enemy['name'], RED)} attacked "
+            f"{target['name']}{tag} for "
+            f"{colorize(str(damage), YELLOW)} damage."
+        )
+
+        if special and target["hp"] > 0 and random.random() < 0.35:
+            status = random.choice(["Stunned", "Poison"])
+            apply_status(target, status, 1.0, 2)
+            print(
+                colorize(
+                    f"{target['name']} was afflicted with {status}!",
+                    RED
+                )
+            )
+
+        elif target["hp"] > 0 and random.random() < 0.15:
+            apply_status(target, "Stunned", 1.0, 1)
+            print(colorize(f"{target['name']} was stunned!", RED))
+
         if target["hp"] <= 0:
-            print(f"{target['name']} has been defeated!")
+            target["hp"] = 0
+            print(
+                colorize(
+                    f"{target['name']} has fallen!",
+                    RED + BOLD
+                )
+            )
