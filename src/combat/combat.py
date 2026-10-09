@@ -1,27 +1,15 @@
+
 import random
 
 from config import INCAPACITATING_STATUSES
 from ui import header, colorize, hp_bar, mp_bar, line
 from ui import RED, GREEN, BOLD, DIM, CYAN
+
 from combat.player_actions import player_action
 from combat.enemy_actions import enemy_turn
 from combat.effects import tick_effects
-
-def alive_party(party):
-    return [c for c in party if c["hp"] > 0]
-
-
-def alive_enemies(enemies):
-    return [e for e in enemies if e["hp"] > 0]
-
-
-def affinity_multiplier(result):
-    return {
-        "Weak": 1.5,
-        "Neutral": 1.0,
-        "Resist": 0.5,
-        "Strong": 0.25
-    }.get(result, 1.0)
+from combat.targeting import alive_party, alive_enemies
+from combat.helpers import affinity_multiplier, apply_buff, apply_status, classify
 
 
 def scaled_stat(value, floor, difficulty):
@@ -29,32 +17,6 @@ def scaled_stat(value, floor, difficulty):
         1,
         int(value * difficulty * (1 + 0.10 * (floor - 1)))
     )
-
-
-def apply_buff(target, name, value, turns):
-    target.setdefault("buffs", {})[name] = {
-        "value": value,
-        "turns": turns
-    }
-
-
-def apply_status(target, status, chance, duration=2):
-    if random.random() < chance:
-        target["statuses"][status] = duration
-        target["status"] = status
-        return True
-
-    return False
-
-
-def classify(result):
-    if result == "Weak":
-        return "Weak"
-
-    if result in ("Resist", "Strong"):
-        return "Resist"
-
-    return "Neutral"
 
 
 def show_battle_status(enemies, party):
@@ -79,10 +41,7 @@ def show_battle_status(enemies, party):
 
         status = f" [{c['status']}]" if c.get("status") else ""
 
-        print(
-            f"{tag} Lv.{c['level']} "
-            f"{c['class']}{status}"
-        )
+        print(f"{tag} Lv.{c['level']} {c['class']}{status}")
 
         if alive:
             print(
@@ -111,7 +70,6 @@ def combat(party, enemies, items, knowledge, difficulty, boss=False):
         c["_free_cast_used"] = False
 
     while alive_party(party) and alive_enemies(enemies):
-
         for c in party:
             c["guarding"] = False
 
@@ -126,7 +84,6 @@ def combat(party, enemies, items, knowledge, difficulty, boss=False):
         )
 
         for character in order:
-
             if not alive_enemies(enemies) or not alive_party(party):
                 break
 
@@ -134,7 +91,7 @@ def combat(party, enemies, items, knowledge, difficulty, boss=False):
                 continue
 
             if any(
-                character["statuses"].get(s, 0) > 0
+                character.get("statuses", {}).get(s, 0) > 0
                 for s in INCAPACITATING_STATUSES
             ):
                 print(
@@ -143,7 +100,6 @@ def combat(party, enemies, items, knowledge, difficulty, boss=False):
                         DIM
                     )
                 )
-
                 tokens = max(0, tokens - 1)
                 continue
 
@@ -177,11 +133,7 @@ def combat(party, enemies, items, knowledge, difficulty, boss=False):
                 cost = 1
 
             if result == "Weak":
-                tokens = min(
-                    max_tokens + 1,
-                    tokens + 1
-                )
-
+                tokens = min(max_tokens + 1, tokens + 1)
                 print(
                     colorize(
                         "WEAKNESS! An extra action has been gained.",
@@ -191,7 +143,6 @@ def combat(party, enemies, items, knowledge, difficulty, boss=False):
 
             elif result == "Resist":
                 tokens = max(0, tokens - 2)
-
                 print(
                     colorize(
                         "The attack was resisted. "
@@ -209,15 +160,9 @@ def combat(party, enemies, items, knowledge, difficulty, boss=False):
         if not alive_enemies(enemies):
             break
 
-        print(
-            "\n" + colorize(
-                "Enemy phase.",
-                RED + BOLD
-            )
-        )
+        print("\n" + colorize("Enemy phase.", RED + BOLD))
 
         for enemy in list(alive_enemies(enemies)):
-
             if enemy["hp"] <= 0:
                 continue
 
