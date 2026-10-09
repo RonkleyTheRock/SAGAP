@@ -19,11 +19,3 @@ def choose_enemy(enemies):
             return living[int(choice) - 1]
 
         print("Invalid choice.")
-if __name__ == "__main__":
-    enemies = [
-        {"name": "Yurei", "hp": 20, "max_hp": 20},
-        {"name": "Kappa", "hp": 0, "max_hp": 15},
-    ]
-
-    target = choose_enemy(enemies)
-    print("Selected:", target["name"])
