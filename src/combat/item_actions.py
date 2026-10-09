@@ -1,7 +1,7 @@
 from data.items import ITEMS
 from ui import header
 from systems.inventory import use_item
-
+from combat.targeting import choose_character
 
 def battle_item_menu(character, party, items):
     usable = [
