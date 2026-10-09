@@ -1,6 +1,6 @@
 from ui import line, colorize, hp_bar, mp_bar
 from ui import CYAN, BOLD
-
+from combat.targeting import choose_enemy
 def player_action(character, enemies, party, items, knowledge):
     if character.get("class") == "Lancer":
         character["mp"] = min(
