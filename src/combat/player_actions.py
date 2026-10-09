@@ -1,7 +1,14 @@
-
 from ui import line, colorize, hp_bar, mp_bar
 from ui import CYAN, BOLD
+
 from combat.targeting import choose_enemy
+from combat.helpers import classify
+from combat.attacks import deal_attack
+from combat.skills import (
+    skill_menu,
+    process_skill,
+    execute_noble_phantasm,
+)
 from combat.item_actions import battle_item_menu
 
 
@@ -14,6 +21,7 @@ def player_action(character, enemies, party, items, knowledge):
 
     while True:
         line()
+
         print(
             f"{colorize(character['name'], CYAN + BOLD)}'s turn | "
             f"{character['class']} | "
@@ -24,17 +32,28 @@ def player_action(character, enemies, party, items, knowledge):
             f"NP {character.get('np_gauge', 0)}/100"
         )
 
-        print("1. Attack  2. Skill  3. Item  4. Guard  5. Analyse  6. Escape")
+        print(
+            "1. Attack  2. Skill  3. Item  "
+            "4. Guard  5. Analyse  6. Escape"
+        )
+
         choice = input("> ")
 
         if choice == "1":
             enemy = choose_enemy(enemies)
+
             if enemy is None:
                 continue
+
             result = deal_attack(
-                character, enemy, "Strike", 24,
-                knowledge, "Basic Attack"
+                character,
+                enemy,
+                "Strike",
+                24,
+                knowledge,
+                "Basic Attack"
             )
+
             return classify(result), 1
 
         if choice == "2":
@@ -60,6 +79,7 @@ def player_action(character, enemies, party, items, knowledge):
         if choice == "3":
             if battle_item_menu(character, party, items):
                 return "Support", 1
+
             continue
 
         if choice == "4":
@@ -69,17 +89,25 @@ def player_action(character, enemies, party, items, knowledge):
 
         if choice == "5":
             enemy = choose_enemy(enemies)
+
             if enemy is None:
                 continue
 
-            print(f"{enemy['name']}: {enemy['hp']}/{enemy['max_hp']} HP")
+            print(
+                f"{enemy['name']}: "
+                f"{enemy['hp']}/{enemy['max_hp']} HP"
+            )
+
             known = knowledge.get(enemy["name"], {})
 
             if known:
                 for affinity, result in known.items():
                     print(f"  {affinity}: {result}")
             else:
-                print("No useful affinity information has been discovered.")
+                print(
+                    "No useful affinity information "
+                    "has been discovered."
+                )
 
             continue
 
