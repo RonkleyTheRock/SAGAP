@@ -29,3 +29,57 @@ def player_action(character, enemies, party, items, knowledge):
 
     print("1. Attack  2. Skill  3. Item  4. Guard  5. Analyse  6. Escape")
     c = input("> ")
+            if c == "1":
+            e = choose_enemy(enemies)
+            result = deal_attack(
+                character, e, "Strike", 24, knowledge, "Basic Attack"
+            )
+            return classify(result), 1
+
+        if c == "2":
+            skill = skill_menu(character)
+            if skill is None:
+                continue
+
+            if skill == "NOBLE_PHANTASM":
+                return execute_noble_phantasm(
+                    character, party, enemies, knowledge
+                )
+
+            outcome = process_skill(
+                character, skill, party, enemies, knowledge
+            )
+
+            if outcome is None:
+                continue
+
+            return outcome
+
+        if c == "3":
+            if battle_item_menu(character, party, items):
+                return "Support", 1
+            continue
+
+        if c == "4":
+            character["guarding"] = True
+            print(f"{character['name']} guards.")
+            return "Guard", 1
+
+        if c == "5":
+            e = choose_enemy(enemies)
+            print(f"{e['name']}: {e['hp']}/{e['max_hp']} HP")
+
+            known = knowledge.get(e["name"], {})
+
+            if known:
+                for affinity, result in known.items():
+                    print(f"  {affinity}: {result}")
+            else:
+                print("No useful affinity information has been discovered.")
+
+            continue
+
+        if c == "6":
+            return "Escape", 1
+
+        print("Invalid choice.")
