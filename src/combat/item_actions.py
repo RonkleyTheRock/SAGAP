@@ -1,7 +1,9 @@
+
 from data.items import ITEMS
 from ui import header
 from systems.inventory import use_item
 from combat.targeting import choose_character
+
 
 def battle_item_menu(character, party, items):
     usable = [
@@ -25,6 +27,7 @@ def battle_item_menu(character, party, items):
 
     if choice.isdigit() and 1 <= int(choice) <= len(usable):
         name = usable[int(choice) - 1]
+
         print("Choose a target:")
         target = choose_character(
             party,
