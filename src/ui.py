@@ -14,8 +14,11 @@ CYAN = '\033[36m'
 WHITE = '\033[37m'
 ITALIC = '\033[3m'
 
+def clear_screen():
+    #Clear the terminal between screens to keep the interface readable.
+    os.system("cls" if os.name == "nt" else "clear")
+
 def enable_ansi():
-    """Turns on ANSI escape support in older Windows terminals."""
     if os.name == "nt":
         os.system("")
 
