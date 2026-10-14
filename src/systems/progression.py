@@ -1,83 +1,67 @@
+from config import STAT_NAMES
+from ui import clear_screen, header, pause
+
+
 def xp_needed(level):
     return 10 + (3 * level)
 
-from config import STAT_NAMES
-from ui import colorize, GREEN, BOLD
-from data.classes import CLASSES
 
 def level_up(character, amount):
-    character["xp"] += amount
-
+    character["xp"] = character.get("xp", 0) + amount
     while character["xp"] >= xp_needed(character["level"]):
         character["xp"] -= xp_needed(character["level"])
         character["level"] += 1
-
-        automatic = STAT_NAMES[
-            (character["level"] - 2) % len(STAT_NAMES)
-        ]
-
-        character["stats"][automatic] += 1
         character["max_hp"] += 10
         character["max_mp"] += 5
         character["hp"] = character["max_hp"]
         character["mp"] = character["max_mp"]
+        from characters.character import check_mastery
+        check_mastery(character)
 
-        print(
-            colorize(
-                f"\n*** {character['name']} reached LEVEL "
-                f"{character['level']}! ***",
-                GREEN + BOLD
-            )
-        )
-
-        print(f"Automatic stat increase: {automatic} +1")
-        print("Choose one additional stat:")
-
-        for i, stat in enumerate(STAT_NAMES, 1):
-            print(f"{i}. {stat}")
-
+        clear_screen()
+        header(f"LEVEL UP — {character['name']}")
+        print(f"{character['name']} reached level {character['level']}!")
+        print("HP and MP maximums increased, and were restored.")
+        print("Choose one stat to increase by 1:")
+        for index, stat in enumerate(STAT_NAMES, 1):
+            print(f"{index}. {stat} (currently {character['stats'][stat]})")
         while True:
-            c = input("> ")
-
-            if c.isdigit() and 1 <= int(c) <= 5:
-                stat = STAT_NAMES[int(c) - 1]
-                character["stats"][stat] += 1
+            choice = input("> ").strip()
+            if choice.isdigit() and 1 <= int(choice) <= len(STAT_NAMES):
+                chosen = STAT_NAMES[int(choice) - 1]
+                character["stats"][chosen] += 1
+                print(f"{chosen} increased by 1.")
                 break
+            print(f"Choose a number from 1 to {len(STAT_NAMES)}.")
+        pause()
+        newly_unlocked = [
+            skill for skill in unlocked_skills(character)
+            if skill.get("level") == character["level"]
+        ]
+        if newly_unlocked:
+            clear_screen()
+            header("NEW SKILL UNLOCKED")
+            for skill in newly_unlocked:
+                print(f"{character['name']} can now use {skill['name']}.")
+            pause()
+
+
 def unlocked_skills(character):
+    from data.classes import CLASSES
+
     skills = [
-        skill
-        for skill in CLASSES[character["class"]]["skills"]
+        skill for skill in CLASSES[character["class"]]["skills"]
         if character["level"] >= skill["level"]
     ]
-
-    if character["inherited_skill"]:
-        skills.append(character["inherited_skill"])
-
+    inherited = character.get("inherited_skill")
+    if inherited and inherited not in skills:
+        skills.append(inherited)
     for class_name in sorted(character.get("class_mastery", set())):
-        if class_name != character["class"]:
-            mastered = CLASSES[class_name]["skills"][0].copy()
-            mastered["source"] = class_name
-            mastered["mastered"] = True
-            skills.append(mastered)
-
+        for skill in CLASSES[class_name].get("class_skills", []):
+            if not any(existing.get("name") == skill.get("name") for existing in skills):
+                mastered_skill = skill.copy()
+                mastered_skill["mastered"] = True
+                mastered_skill["source"] = class_name
+                skills.append(mastered_skill)
     return skills
 
-
-def check_mastery(character):
-    if character["level"] >= 7:
-        character.setdefault("class_mastery", set()).add(
-            character["class"]
-        )
-
-if __name__ == "__main__":
-    character = create_character(
-        "Irety",
-        "Strong and protective",
-        "Saber"
-    )
-
-    character["level"] = 7
-
-    check_mastery(character)
-
-    print(character["class_mastery"])
