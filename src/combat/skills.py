@@ -4,7 +4,7 @@ import random
 from data.classes import CLASSES
 from config import MAGIC_AFFINITIES
 from ui import (
-    header, colorize, CYAN, BOLD, YELLOW, GREEN,
+    header, clear_screen, colorize, CYAN, BOLD, YELLOW, GREEN,
     MAGENTA, RED, WHITE, ITALIC
 )
 from combat.targeting import (
@@ -337,3 +337,4 @@ def execute_noble_phantasm(character, party, enemies, knowledge):
         return "Support", 1
 
     return "Support", 1
+
