@@ -1,7 +1,9 @@
 from config import AFFINITIES
 
 def mk_aff(weak=(), resist=(), strong=()):
-    """builds a full affinity table for an enemy. anything not listed is neutral. 'strong' means the enemy hardly felt the attack."""
+    #an affinity table for all enemies. weak means they will take more damavge
+    #resist means they will take very little damage and you lose a turn
+    #anything that has not been listed is neutral
     aff = {a: "Neutral" for a in AFFINITIES}
 
     for a in weak:
