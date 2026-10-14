@@ -269,3 +269,4 @@ CLASSES = {
             "declaration": "Nobody gets left on the far bank. That was true the first time I said it, and it's still true now."
         },
     },
+}
