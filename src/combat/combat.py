@@ -2,7 +2,7 @@
 import random
 
 from config import INCAPACITATING_STATUSES
-from ui import header, colorize, hp_bar, mp_bar, line
+from ui import header, colorize, hp_bar, mp_bar, line, clear_screen
 from ui import RED, GREEN, BOLD, DIM, CYAN
 
 from combat.player_actions import player_action
@@ -59,6 +59,7 @@ def show_battle_status(enemies, party):
 def combat(party, enemies, items, knowledge, difficulty, boss=False):
     max_tokens = len(alive_party(party))
 
+    clear_screen()
     header("COMBAT START", 64, "=")
 
     print(
@@ -117,13 +118,16 @@ def combat(party, enemies, items, knowledge, difficulty, boss=False):
             result, cost = result_tuple
 
             if result == "Escape":
+                smoke_bonus = any(c.pop("escape_bonus", False) for c in party)
                 chance = (
                     0.30
                     + sum(
                         c["stats"]["AG"]
                         for c in alive_party(party)
                     ) / 450
+                    + (0.40 if smoke_bonus else 0.0)
                 )
+                chance = min(0.95, chance)
 
                 if random.random() < chance and not boss:
                     print("Escaped successfully!")
