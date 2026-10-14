@@ -1,3 +1,6 @@
+from data.items import ITEMS
+
+
 def create_inventory():
     return {
         "Medicine": 2,
@@ -9,127 +12,83 @@ def create_inventory():
         "Smoke Bomb": 1,
         "Amrita": 0,
     }
-if __name__ == "__main__":
-    inventory = create_inventory()
-    print(inventory)
+
 
 def use_item(item_name, target):
-    if item_name == "Medicine":
-        target["hp"] = min(target["max_hp"], target["hp"] + 60)
+    """Apply an item and return True only when its effect is valid."""
+    if item_name not in ITEMS or target is None:
+        return False
 
+    hp = target.get("hp", 0)
+    max_hp = target.get("max_hp", 0)
+    mp = target.get("mp", 0)
+    max_mp = target.get("max_mp", 0)
+
+    if item_name == "Medicine":
+        if hp <= 0 or hp >= max_hp:
+            return False
+        target["hp"] = min(max_hp, hp + 60)
 
     elif item_name == "Greater Medicine":
-        target["hp"] = min(target["max_hp"], target["hp"] + 140)
-
+        if hp <= 0 or hp >= max_hp:
+            return False
+        target["hp"] = min(max_hp, hp + 140)
 
     elif item_name == "Ether":
-        target["mp"] = min(target["max_mp"], target["mp"] + 35)
+        if hp <= 0 or mp >= max_mp:
+            return False
+        target["mp"] = min(max_mp, mp + 35)
 
     elif item_name == "Greater Ether":
-        target["mp"] = min(target["max_mp"], target["mp"] + 80)
+        if hp <= 0 or mp >= max_mp:
+            return False
+        target["mp"] = min(max_mp, mp + 80)
 
     elif item_name == "Panacea":
+        statuses = target.get("statuses", {})
+        if not statuses and not target.get("status"):
+            return False
         target["status"] = None
         target["statuses"] = {}
 
     elif item_name == "Revival Bead":
-        if target["hp"] > 0:
+        if hp > 0:
             return False
-
-        target["hp"] = max(1, int(target["max_hp"] * 0.35))
+        target["hp"] = max(1, int(max_hp * 0.35))
+        target["status"] = None
+        target["statuses"] = {}
 
     elif item_name == "Amrita":
-        target["hp"] = min(target["max_hp"], target["hp"] + 100)
-        target["mp"] = min(target["max_mp"], target["mp"] + 100)
+        if hp <= 0 or (hp >= max_hp and mp >= max_mp):
+            return False
+        target["hp"] = min(max_hp, hp + 100)
+        target["mp"] = min(max_mp, mp + 40)
 
     else:
         return False
 
     return True
-
-if __name__ == "__main__":
-    character = {
-        "hp": 10,
-        "max_hp": 100,
-        "mp": 20,
-        "max_mp": 50,
-        "status": "Poison",
-        "statuses": {"Poison": 2}
-    }
-
-    print("Before:", character)
-
-    use_item("Panacea", character)
-
-    print("After:", character)
-def use_item(item_name, target):
-    if item_name == "Medicine":
-        target["hp"] = min(target["max_hp"], target["hp"] + 60)
-
-    elif item_name == "Greater Medicine":
-        target["hp"] = min(target["max_hp"], target["hp"] + 140)
-
-    elif item_name == "Ether":
-        target["mp"] = min(target["max_mp"], target["mp"] + 35)
-
-    elif item_name == "Greater Ether":
-        target["mp"] = min(target["max_mp"], target["mp"] + 80)
-
-    elif item_name == "Panacea":
-        target["status"] = None
-        target["statuses"] = {}
-
-    elif item_name == "Revival Bead":
-        if target["hp"] > 0:
-            return False
-
-        target["hp"] = max(1, int(target["max_hp"] * 0.35))
-
-    elif item_name == "Amrita":
-        target["hp"] = min(target["max_hp"], target["hp"] + 100)
-        target["mp"] = min(target["max_mp"], target["mp"] + 40)
-
-    else:
-        return False
-
-
-if __name__ == "__main__":
-    character = {
-        "hp": 50,
-        "max_hp": 100,
-        "mp": 20,
-        "max_mp": 50,
-        "status": "Poison",
-        "statuses": {"Poison": 2}
-    }
-
-    print("Before:", character)
-
-    use_item("Medicine", character)
-
-    print("After:", character)
 
 
 def add_item(inventory, item_name, amount=1):
-    if item_name not in inventory:
+    if item_name not in inventory or amount <= 0:
         return False
-
     inventory[item_name] += amount
     return True
 
-def remove_item(inventory, item_name, amount=1):
-    if item_name not in inventory:
-        return False
 
+def remove_item(inventory, item_name, amount=1):
+    if item_name not in inventory or amount <= 0:
+        return False
     if inventory[item_name] < amount:
         return False
-
     inventory[item_name] -= amount
     return True
 
+
 def show_inventory(inventory):
     print("\nINVENTORY")
-
     for item_name, amount in inventory.items():
         print(f"{item_name}: x{amount}")
+
 
