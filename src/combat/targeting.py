@@ -1,3 +1,6 @@
+from ui import clear_screen, header
+
+
 def alive_party(party):
     return [c for c in party if c["hp"] > 0]
 
@@ -12,6 +15,8 @@ def choose_enemy(enemies):
     if not living:
         return None
 
+    clear_screen()
+    header("SELECT ENEMY", 64, "-")
     for i, enemy in enumerate(living, 1):
         print(
             f"{i}. {enemy['name']} "
@@ -33,6 +38,8 @@ def choose_character(party, include_dead=False):
     if not characters:
         return None
 
+    clear_screen()
+    header("SELECT CHARACTER", 64, "-")
     for i, character in enumerate(characters, 1):
         print(
             f"{i}. {character['name']} - "
