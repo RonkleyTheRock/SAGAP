@@ -24,7 +24,7 @@ def parameter_grades(stats):
 
 CLASSES = {
     "Saber": {
-        "description": "A balanced, all-around blade. Strong everywhere, weak nowhere, and faintly insulted by the idea that fairness is boring.",
+        "description": "A balanced, well rounded blade. Usefull in all situations and faintly insulted by the idea that fairness is boring.",
         "stats": {"HP": 135, "MP": 25, "ST": 15, "EN": 15, "MA": 3, "LK": 5, "AG": 6},
         "passive": "After every battle, restore 5% of maximum HP.",
         "class_skills": [
@@ -92,7 +92,7 @@ CLASSES = {
     },
 
     "Caster": {
-        "description": "A scholar of forces that were never meant to be scholarly about. Exploits elemental weakness with something close to academic glee.",
+        "description": "A scholar of forces that were never meant to be mastered by man. Exploits elemental weakness with something close to academic glee.",
         "stats": {"HP": 82, "MP": 82, "ST": 3, "EN": 6, "MA": 18, "LK": 9, "AG": 9},
         "passive": "After every battle, restore 5% of maximum MP.",
         "class_skills": [
@@ -124,7 +124,7 @@ CLASSES = {
     },
 
     "Berserker": {
-        "description": "Power purchased with something that isn't money. Hits like consequence finally catching up to someone.",
+        "description": "Power purchased with something that isn't money. Each hit while powerful will eventually cath up to you.",
         "stats": {"HP": 92, "MP": 70, "ST": 5, "EN": 6, "MA": 14, "LK": 10, "AG": 9},
         "passive": "Skills that draw on this character's own life force deal 25% additional damage.",
         "class_skills": [
@@ -162,7 +162,7 @@ CLASSES = {
     },
 
     "Archer": {
-        "description": "Keeps everything at a distance, including - a little too often - the people trying to help.",
+        "description": "Keeps everything at a distance, including  .",
         "stats": {"HP": 96, "MP": 62, "ST": 6, "EN": 8, "MA": 13, "LK": 12, "AG": 10},
         "passive": "Status effects inflicted by this character last one turn longer.",
         "class_skills": [
@@ -200,7 +200,7 @@ CLASSES = {
     },
 
     "Assassin": {
-        "description": "Unpredictable, fast, and allergic to being watched closely - including, occasionally, by their own party.",
+        "description": "Unpredictable, fast, and icapable of being watched too closely .",
         "stats": {"HP": 85, "MP": 42, "ST": 11, "EN": 5, "MA": 5, "LK": 18, "AG": 20},
         "passive": "Critical hit chance is doubled, and critical hits deal 75% bonus damage instead of 50%.",
         "class_skills": [
@@ -234,7 +234,7 @@ CLASSES = {
     },
 
     "Rider": {
-        "description": "Carries the wounded further than they could've walked alone - sometimes back from somewhere further than that.",
+        "description": "Carries the wounded further than they could've walked alone. a true king.",
         "stats": {"HP": 94, "MP": 78, "ST": 4, "EN": 7, "MA": 16, "LK": 9, "AG": 8},
         "passive": "After a hard-won battle, there is a chance to ease some of the party's wounds.",
         "class_skills": [
@@ -269,4 +269,3 @@ CLASSES = {
             "declaration": "Nobody gets left on the far bank. That was true the first time I said it, and it's still true now."
         },
     },
-}
